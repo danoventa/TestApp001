@@ -13,11 +13,12 @@ namespace WindowsFormsApplication1
 {
     public partial class main : Form
     {
+        MarketGenerator market_generator = new MarketGenerator();
+
         public main()
         {
             InitializeComponent();
-
- 
+            market_generator.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -25,9 +26,15 @@ namespace WindowsFormsApplication1
             
         }
 
+        public MarketEvent MarketUpdateEvent(object sender, MarketEvent m)
+        {
+            return m;
+        }
+
         private void label1_Click(object sender, EventArgs e)
         {
-            label1.Text = "Tada!";
+            market_generator.MarketUpdate = (MarketEvent) e;
+            label1.Text = 0.ToString();
         }
 
     }

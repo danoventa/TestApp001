@@ -30,7 +30,6 @@ namespace WindowsFormsApplication1
         /// </summary>
         private void InitializeComponent()
         {
-            MarketGenerator market = new MarketGenerator();
 
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
