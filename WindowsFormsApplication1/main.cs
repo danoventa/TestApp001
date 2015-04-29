@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using MarketGen;
 
 namespace WindowsFormsApplication1
@@ -17,21 +18,25 @@ namespace WindowsFormsApplication1
     {
         private MarketGenerator mGen = new MarketGenerator();
         private byte[] dBytes;
+        private ByteDs ds;
 
         public main()
         {
             InitializeComponent();
+            ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
             mGen.MarketUpdate += r_MarketUpdate;
             mGen.Start();
+            label1.Text = ds.ID.ToString();
         }
 
         private void r_MarketUpdate(object sender, MarketEvent e)
         {
             dBytes = e.Data;
+           
         }
 
 
@@ -41,6 +46,7 @@ namespace WindowsFormsApplication1
 
             label8.Text = dBytes.Length.ToString();
             ByteDs ds = (ByteDs) BytesToObject(ref dBytes, typeof (ByteDs));
+
             label1.Text = ds.ID.ToString();
             label2.Text = ds.TradePrice.ToString();
             label3.Text = ds.TradeQty.ToString();
@@ -48,6 +54,7 @@ namespace WindowsFormsApplication1
             label5.Text = ds.BidQty.ToString();
             label6.Text = ds.AskPrice.ToString();
             label7.Text = ds.AskQty.ToString();
+
 
 
         }

@@ -38,6 +38,15 @@ namespace WindowsFormsApplication1
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TradePrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TradeQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BidPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BidQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AskPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AskQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -53,7 +62,7 @@ namespace WindowsFormsApplication1
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(47, 50);
+            this.label2.Location = new System.Drawing.Point(109, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 1;
@@ -62,7 +71,7 @@ namespace WindowsFormsApplication1
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(47, 63);
+            this.label3.Location = new System.Drawing.Point(177, 37);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -71,7 +80,7 @@ namespace WindowsFormsApplication1
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(47, 76);
+            this.label4.Location = new System.Drawing.Point(243, 37);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 3;
@@ -80,7 +89,7 @@ namespace WindowsFormsApplication1
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(47, 89);
+            this.label5.Location = new System.Drawing.Point(299, 37);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 4;
@@ -89,7 +98,7 @@ namespace WindowsFormsApplication1
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(47, 102);
+            this.label6.Location = new System.Drawing.Point(367, 37);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 5;
@@ -98,7 +107,7 @@ namespace WindowsFormsApplication1
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(47, 115);
+            this.label7.Location = new System.Drawing.Point(435, 37);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(35, 13);
             this.label7.TabIndex = 6;
@@ -107,17 +116,77 @@ namespace WindowsFormsApplication1
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(347, 37);
+            this.label8.Location = new System.Drawing.Point(47, 9);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 7;
             this.label8.Text = "label8";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.TradePrice,
+            this.TradeQty,
+            this.BidPrice,
+            this.BidQty,
+            this.AskPrice,
+            this.AskQty});
+            this.dataGridView1.Location = new System.Drawing.Point(50, 68);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(742, 264);
+            this.dataGridView1.TabIndex = 8;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // TradePrice
+            // 
+            this.TradePrice.HeaderText = "TradePrice";
+            this.TradePrice.Name = "TradePrice";
+            this.TradePrice.ReadOnly = true;
+            // 
+            // TradeQty
+            // 
+            this.TradeQty.HeaderText = "TradeQty";
+            this.TradeQty.Name = "TradeQty";
+            this.TradeQty.ReadOnly = true;
+            // 
+            // BidPrice
+            // 
+            this.BidPrice.HeaderText = "BidPrice";
+            this.BidPrice.Name = "BidPrice";
+            this.BidPrice.ReadOnly = true;
+            // 
+            // BidQty
+            // 
+            this.BidQty.HeaderText = "BidQty";
+            this.BidQty.Name = "BidQty";
+            this.BidQty.ReadOnly = true;
+            // 
+            // AskPrice
+            // 
+            this.AskPrice.HeaderText = "AskPrice";
+            this.AskPrice.Name = "AskPrice";
+            this.AskPrice.ReadOnly = true;
+            // 
+            // AskQty
+            // 
+            this.AskQty.HeaderText = "AskQty";
+            this.AskQty.Name = "AskQty";
+            this.AskQty.ReadOnly = true;
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(652, 333);
+            this.ClientSize = new System.Drawing.Size(835, 344);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -129,6 +198,7 @@ namespace WindowsFormsApplication1
             this.Name = "main";
             this.Text = "Market Generator";
             this.Load += new System.EventHandler(this.Main_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,6 +214,14 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TradePrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TradeQty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BidPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BidQty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AskPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AskQty;
 
     }
 }
