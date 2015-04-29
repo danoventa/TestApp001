@@ -63,10 +63,10 @@ namespace WindowsFormsApplication1
         {
             object result = null;
 
-            GCHandle pinnedBytes = GCHandle.Alloc(dataBytes, GCHandleType.Pinned);
+            var pinnedBytes = GCHandle.Alloc(dataBytes, GCHandleType.Pinned);
             try
             {
-                IntPtr pinnedBytesPtr = pinnedBytes.AddrOfPinnedObject();
+                var pinnedBytesPtr = pinnedBytes.AddrOfPinnedObject();
 
                 result = Marshal.PtrToStructure(pinnedBytesPtr, overlayType);
             }
