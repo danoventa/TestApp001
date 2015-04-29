@@ -35,6 +35,12 @@ namespace WindowsFormsApplication1
 
         }
 
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            mGen.Stop();
+        }
+
+
         private void r_MarketUpdate(object sender, MarketEvent e)
         {
             dBytes = e.Data;
@@ -46,56 +52,8 @@ namespace WindowsFormsApplication1
         {
             // MarketEvent e = new MarketEvent();
             // DatGridView_RowUpdate(sender, (DataGridViewRowEventArgs)m);
-            // BindData();
-            ByteDs ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
-
-            if (ds != null)
-            {
-                var dList = new List<ByteDs>()
-                {
-
-                    new ByteDs()
-                    {
-                        ID = ds.ID,
-                        TradePrice = ds.TradePrice,
-                        TradeQty = ds.TradeQty,
-                        BidPrice = ds.BidPrice,
-                        BidQty = ds.BidQty,
-                        AskPrice = ds.AskPrice,
-                        AskQty = ds.AskQty
-                    }
-                };
-                label1.Text = dList.Count.ToString();
-
-                foreach (var item in dList)
-                {
-                    Boolean exists = false;
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
-                    {
-                        if (row.Cells["ID"].Value != null)
-                            label2.Text = row.Cells[0].Value.ToString();
-                        if (item.ID != null)
-                            label3.Text = item.ID.ToString();
-
-                        if (row.Cells[0].Value == item.ID.ToString())
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (!exists)
-                    {
-                        dataGridView1.Rows.Add(item.ID, 
-                                                item.TradePrice, 
-                                                item.TradeQty, 
-                                                item.BidPrice, 
-                                                item.BidQty, 
-                                                item.AskPrice, 
-                                                item.AskQty);
-                    }
-
-                }
-            }
+            BindData();
+            
 
         }
 
@@ -127,15 +85,40 @@ namespace WindowsFormsApplication1
                     }
                 };
                 label1.Text = dList.Count.ToString();
-                var dBind = new BindingList<ByteDs>(dList);
-                var source = new BindingSource(dBind, null);
 
+                foreach (var item in dList)
+                {
+                    Boolean exists = false;
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells["ID"].Value != null)
+                            label2.Text = row.Cells[0].Value.ToString();
+                        if (item.ID != null)
+                            label3.Text = item.ID.ToString();
 
-                dataGridView1.DataSource = source;
+                        if (row.Cells["ID"].Value != null && item.ID != null)
+                        if (row.Cells["ID"].Value.ToString() == item.ID.ToString())
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        dataGridView1.Rows.Add(item.ID,
+                                                item.TradePrice,
+                                                item.TradeQty,
+                                                item.BidPrice,
+                                                item.BidQty,
+                                                item.AskPrice,
+                                                item.AskQty);
+                    }
+
+                }
             }
         }
 
-
+        // convert the byte array to the ByteDs datastructure for access
         public static object BytesToObject(ref byte[] dataBytes, Type overlayType)
         {
             object result = null;
@@ -153,19 +136,19 @@ namespace WindowsFormsApplication1
             }
             return result;
         }
-
+        // Datastructure to unpack the data from provided market class
+        [StructLayout(LayoutKind.Sequential, Size = 40, Pack = 1, CharSet = CharSet.Ansi)]
+        public class ByteDs
+        {
+            public int ID;
+            public double TradePrice;
+            public int TradeQty;
+            public double BidPrice;
+            public int BidQty;
+            public double AskPrice;
+            public int AskQty;
+        }
 
     }
 
-    [StructLayout(LayoutKind.Sequential, Size=40, Pack=1, CharSet=CharSet.Ansi)]
-    public class ByteDs
-    {
-        public int ID;
-        public double TradePrice;
-        public int TradeQty;
-        public double BidPrice;
-        public int BidQty;
-        public double AskPrice;
-        public int AskQty;
-    }
 }
