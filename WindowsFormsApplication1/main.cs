@@ -91,16 +91,40 @@ namespace WindowsFormsApplication1
                     Boolean exists = false;
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        if (row.Cells["ID"].Value != null)
-                            label2.Text = row.Cells[0].Value.ToString();
-                        if (item.ID != null)
-                            label3.Text = item.ID.ToString();
+                        row.DefaultCellStyle.BackColor = Color.White;
 
                         if (row.Cells["ID"].Value != null && item.ID != null)
                         if (row.Cells["ID"].Value.ToString() == item.ID.ToString())
                         {
                             exists = true;
-                            break;
+                            row.DefaultCellStyle.BackColor = Color.White;
+                            foreach (DataGridViewColumn col in dataGridView1.Columns)
+                            {
+                                
+                                var checkString = dataGridView1[col.Index, row.Index].Value.ToString();
+
+                                // need this fixed. logic error. If checks everything, then need to make sure that only some things are checked, not all, cause it leads to the entire column being colored. 
+                                if (checkString != item.TradePrice.ToString()
+                                    || checkString != item.TradeQty.ToString()
+                                    || checkString != item.BidPrice.ToString()
+                                    || checkString != item.BidQty.ToString()
+                                    || checkString != item.AskPrice.ToString()
+                                    || checkString != item.AskQty.ToString())
+                                {
+                                    row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }
+                            }
+
+                            // row.DefaultCellStyle.BackColor = Color.Aquamarine;
+
+                            row.SetValues(item.ID, 
+                                item.TradePrice,
+                                item.TradeQty,
+                                item.BidPrice, 
+                                item.BidQty,
+                                item.AskPrice, 
+                                item.AskQty);
                         }
                     }
                     if (!exists)
