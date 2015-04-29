@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -30,34 +31,110 @@ namespace WindowsFormsApplication1
         {
             mGen.MarketUpdate += r_MarketUpdate;
             mGen.Start();
-            label1.Text = ds.ID.ToString();
+
+
         }
 
         private void r_MarketUpdate(object sender, MarketEvent e)
         {
             dBytes = e.Data;
-           
+
         }
 
 
-        private void label1_Click(object sender, EventArgs m)
+        private void label1_Click(object sender, EventArgs e)
         {
-            //MarketEvent e = new MarketEvent();
+            // MarketEvent e = new MarketEvent();
+            // DatGridView_RowUpdate(sender, (DataGridViewRowEventArgs)m);
+            // BindData();
+            ByteDs ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
 
-            label8.Text = dBytes.Length.ToString();
-            ByteDs ds = (ByteDs) BytesToObject(ref dBytes, typeof (ByteDs));
+            if (ds != null)
+            {
+                var dList = new List<ByteDs>()
+                {
 
-            label1.Text = ds.ID.ToString();
-            label2.Text = ds.TradePrice.ToString();
-            label3.Text = ds.TradeQty.ToString();
-            label4.Text = ds.BidPrice.ToString();
-            label5.Text = ds.BidQty.ToString();
-            label6.Text = ds.AskPrice.ToString();
-            label7.Text = ds.AskQty.ToString();
+                    new ByteDs()
+                    {
+                        ID = ds.ID,
+                        TradePrice = ds.TradePrice,
+                        TradeQty = ds.TradeQty,
+                        BidPrice = ds.BidPrice,
+                        BidQty = ds.BidQty,
+                        AskPrice = ds.AskPrice,
+                        AskQty = ds.AskQty
+                    }
+                };
+                label1.Text = dList.Count.ToString();
 
+                foreach (var item in dList)
+                {
+                    Boolean exists = false;
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells["ID"].Value != null)
+                            label2.Text = row.Cells[0].Value.ToString();
+                        if (item.ID != null)
+                            label3.Text = item.ID.ToString();
 
+                        if (row.Cells[0].Value == item.ID.ToString())
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        dataGridView1.Rows.Add(item.ID, 
+                                                item.TradePrice, 
+                                                item.TradeQty, 
+                                                item.BidPrice, 
+                                                item.BidQty, 
+                                                item.AskPrice, 
+                                                item.AskQty);
+                    }
+
+                }
+            }
 
         }
+
+        protected void DatGridView_RowUpdate(object sender, DataGridViewRowEventArgs e)
+        {
+            DataGridViewRow row = dataGridView1.Rows[e.Row.Index];
+            
+            
+        }
+
+        private void BindData()
+        {
+            ByteDs ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
+
+            if (ds != null)
+            {
+                var dList = new List<ByteDs>()
+                {
+
+                    new ByteDs()
+                    {
+                        ID = ds.ID,
+                        TradePrice = ds.TradePrice,
+                        TradeQty = ds.TradeQty,
+                        BidPrice = ds.BidPrice,
+                        BidQty = ds.BidQty,
+                        AskPrice = ds.AskPrice,
+                        AskQty = ds.AskQty
+                    }
+                };
+                label1.Text = dList.Count.ToString();
+                var dBind = new BindingList<ByteDs>(dList);
+                var source = new BindingSource(dBind, null);
+
+
+                dataGridView1.DataSource = source;
+            }
+        }
+
 
         public static object BytesToObject(ref byte[] dataBytes, Type overlayType)
         {
