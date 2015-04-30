@@ -102,18 +102,41 @@ namespace WindowsFormsApplication1
                             {
                                 
                                 var checkString = dataGridView1[col.Index, row.Index].Value.ToString();
-
+                                row.Cells[col.Index].Style.BackColor = Color.White;
+                                label7.Text = col.Index.ToString();
                                 // need this fixed. logic error. If checks everything, then need to make sure that only some things are checked, not all, cause it leads to the entire column being colored. 
-                                if (checkString != item.TradePrice.ToString()
-                                    || checkString != item.TradeQty.ToString()
-                                    || checkString != item.BidPrice.ToString()
-                                    || checkString != item.BidQty.ToString()
-                                    || checkString != item.AskPrice.ToString()
-                                    || checkString != item.AskQty.ToString())
+                                if (row.Cells[1].Value.ToString() != item.TradePrice.ToString())
+                                {
+                                    label8.Text = col.Index.ToString();
+                                    label6.Text = row.Cells[1].Value.ToString();
+                                    row.Cells[1].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }
+                                /*if (checkString != item.TradeQty.ToString())
                                 {
                                     row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
+                                if (checkString != item.BidPrice.ToString())
+                                {
+                                    row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }
+                                if (checkString != item.BidQty.ToString())
+                                {
+                                    row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }
+                                if (checkString != item.AskPrice.ToString())
+                                {
+                                    row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }
+                                if (checkString != item.AskQty.ToString())
+                                {
+                                    row.Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
+                                }*/
                             }
 
                             // row.DefaultCellStyle.BackColor = Color.Aquamarine;
