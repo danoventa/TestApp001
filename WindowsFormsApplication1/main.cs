@@ -26,6 +26,13 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
+            DataGridViewCellStyle hStyle = dataGridView1.ColumnHeadersDefaultCellStyle.Clone();
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.Red;
+
+            foreach (DataGridViewColumn item in dataGridView1.Columns)
+            {
+                item.HeaderCell.Style = hStyle;
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -48,14 +55,6 @@ namespace WindowsFormsApplication1
             // BindData();
         }
 
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-            BindData();
-            
-
-        }
-
         protected void DatGridView_RowUpdate(object sender, DataGridViewRowEventArgs e)
         {
             DataGridViewRow row = dataGridView1.Rows[e.Row.Index];
@@ -70,7 +69,6 @@ namespace WindowsFormsApplication1
             {
                 var dList = new List<ByteDs>()
                 {
-
                     new ByteDs()
                     {
                         ID = ds.ID,
@@ -194,6 +192,21 @@ namespace WindowsFormsApplication1
             public int BidQty;
             public double AskPrice;
             public int AskQty;
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            mGen.Start();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            mGen.Stop();
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+            BindData();
         }
 
     }
