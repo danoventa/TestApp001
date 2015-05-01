@@ -45,14 +45,12 @@ namespace WindowsFormsApplication1
         private void r_MarketUpdate(object sender, MarketEvent e)
         {
             dBytes = e.Data;
-
+            // BindData();
         }
 
 
         private void label1_Click(object sender, EventArgs e)
         {
-            // MarketEvent e = new MarketEvent();
-            // DatGridView_RowUpdate(sender, (DataGridViewRowEventArgs)m);
             BindData();
             
 
@@ -61,8 +59,7 @@ namespace WindowsFormsApplication1
         protected void DatGridView_RowUpdate(object sender, DataGridViewRowEventArgs e)
         {
             DataGridViewRow row = dataGridView1.Rows[e.Row.Index];
-            
-            
+            BindData();
         }
 
         private void BindData()
@@ -85,95 +82,62 @@ namespace WindowsFormsApplication1
                         AskQty = ds.AskQty
                     }
                 };
-                label1.Text = dList.Count.ToString();
 
                 foreach (var item in dList)
                 {
                     Boolean exists = false;
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        row.DefaultCellStyle.BackColor = Color.White;
+                        row.DefaultCellStyle.BackColor = Color.Black;
+                        row.DefaultCellStyle.ForeColor = Color.White;
 
                         if (row.Cells["ID"].Value != null && item.ID != null)
                         if (row.Cells["ID"].Value.ToString() == item.ID.ToString())
                         {
                             exists = true;
-                            row.DefaultCellStyle.BackColor = Color.White;
                             foreach (DataGridViewColumn col in dataGridView1.Columns)
                             {
-                                
-                                // var checkString = dataGridView1[col.Index, row.Index].Value.ToString();
-                                row.Cells[col.Index].Style.BackColor = Color.White;
-                                label7.Text = col.Index.ToString();
-
+                                var cell = row.Cells[col.Index].Style;
                                 switch (col.Index)
                                 {
                                     case 1:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[1].Value.ToString();
-                                        row.Cells[1].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.DarkRed;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                     case 2:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[2].Value.ToString();
-                                        row.Cells[2].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.Black;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                     case 3:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[3].Value.ToString();
-                                        row.Cells[3].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.DarkRed;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                     case 4:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[4].Value.ToString();
-                                        row.Cells[4].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.DarkRed;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                     case 5:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[5].Value.ToString();
-                                        row.Cells[5].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.DarkRed;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                     case 6:
-                                        label8.Text = col.Index.ToString();
-                                        label6.Text = row.Cells[6].Value.ToString();
-                                        row.Cells[6].Style.BackColor = Color.Aquamarine;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                            cell.BackColor = Color.DarkRed;
+                                        else
+                                            cell.BackColor = Color.Black;
                                         break;
                                 }
-
-                                /* // need this fixed. logic error. If checks everything, then need to make sure that only some things are checked, not all, cause it leads to the entire column being colored. 
-                                if (row.Cells[1].Value.ToString() != item.TradePrice.ToString() && col.Index == 1)
-                                {
-
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
-                                if (row.Cells[2].Value.ToString() != item.TradeQty.ToString() && col.Index == 2)
-                                {
-                                    
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
-                                if (row.Cells[3].Value.ToString() != item.BidPrice.ToString() && col.Index == 3)
-                                {
-                                    
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
-                                if (row.Cells[4].Value.ToString() != item.BidQty.ToString() && col.Index == 4)
-                                {
-                                    
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
-                                if (row.Cells[5].Value.ToString() != item.AskPrice.ToString() && col.Index == 5)
-                                {
-                                    
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
-                                if (row.Cells[6].Value.ToString() != item.AskQty.ToString() && col.Index == 6)
-                                {
-                                    
-                                    // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }*/
                             }
-
-                            // row.DefaultCellStyle.BackColor = Color.Aquamarine;
 
                             row.SetValues(item.ID, 
                                 item.TradePrice,
@@ -186,6 +150,8 @@ namespace WindowsFormsApplication1
                     }
                     if (!exists)
                     {
+                        dataGridView1.DefaultCellStyle.BackColor = Color.Black;
+                        dataGridView1.DefaultCellStyle.ForeColor = Color.White;
                         dataGridView1.Rows.Add(item.ID,
                                                 item.TradePrice,
                                                 item.TradeQty,
