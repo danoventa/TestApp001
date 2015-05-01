@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
@@ -104,49 +105,72 @@ namespace WindowsFormsApplication1
                                 // var checkString = dataGridView1[col.Index, row.Index].Value.ToString();
                                 row.Cells[col.Index].Style.BackColor = Color.White;
                                 label7.Text = col.Index.ToString();
-                                // need this fixed. logic error. If checks everything, then need to make sure that only some things are checked, not all, cause it leads to the entire column being colored. 
+
+                                switch (col.Index)
+                                {
+                                    case 1:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[1].Value.ToString();
+                                        row.Cells[1].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                    case 2:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[2].Value.ToString();
+                                        row.Cells[2].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                    case 3:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[3].Value.ToString();
+                                        row.Cells[3].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                    case 4:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[4].Value.ToString();
+                                        row.Cells[4].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                    case 5:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[5].Value.ToString();
+                                        row.Cells[5].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                    case 6:
+                                        label8.Text = col.Index.ToString();
+                                        label6.Text = row.Cells[6].Value.ToString();
+                                        row.Cells[6].Style.BackColor = Color.Aquamarine;
+                                        break;
+                                }
+
+                                /* // need this fixed. logic error. If checks everything, then need to make sure that only some things are checked, not all, cause it leads to the entire column being colored. 
                                 if (row.Cells[1].Value.ToString() != item.TradePrice.ToString() && col.Index == 1)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[1].Value.ToString();
-                                    row.Cells[1].Style.BackColor = Color.Aquamarine;
+
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
                                 if (row.Cells[2].Value.ToString() != item.TradeQty.ToString() && col.Index == 2)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[2].Value.ToString();
-                                    row.Cells[2].Style.BackColor = Color.Aquamarine;
+                                    
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
                                 if (row.Cells[3].Value.ToString() != item.BidPrice.ToString() && col.Index == 3)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[3].Value.ToString();
-                                    row.Cells[3].Style.BackColor = Color.Aquamarine;
+                                    
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
                                 if (row.Cells[4].Value.ToString() != item.BidQty.ToString() && col.Index == 4)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[4].Value.ToString();
-                                    row.Cells[4].Style.BackColor = Color.Aquamarine;
+                                    
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
                                 if (row.Cells[5].Value.ToString() != item.AskPrice.ToString() && col.Index == 5)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[5].Value.ToString();
-                                    row.Cells[5].Style.BackColor = Color.Aquamarine;
+                                    
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
                                 }
                                 if (row.Cells[6].Value.ToString() != item.AskQty.ToString() && col.Index == 6)
                                 {
-                                    label8.Text = col.Index.ToString();
-                                    label6.Text = row.Cells[6].Value.ToString();
-                                    row.Cells[6].Style.BackColor = Color.Aquamarine;
+                                    
                                     // dataGridView1.Rows[row.Index].Cells[col.Index].Style.BackColor = Color.Aquamarine;
-                                }
+                                }*/
                             }
 
                             // row.DefaultCellStyle.BackColor = Color.Aquamarine;
