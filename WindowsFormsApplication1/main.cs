@@ -12,22 +12,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using System.Windows;
 using MarketGen;
 
 namespace WindowsFormsApplication1
 {
     public partial class main : Form
     {
-        MarketGenerator mGen = new MarketGenerator();
+        // needed throughout various methods. 
+        private MarketGenerator mGen = new MarketGenerator();
         private byte[] dBytes;
         private ByteDs ds;
-        
-           
+        private int count = 0;
 
         public main()
         {
             InitializeComponent();
-            
+
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            mGen.MarketUpdate += r_MarketUpdate;
+            mGen.Start();
+            // data structure will be needed to get access to all of the data within the market. 
+            ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
             DataGridViewCellStyle hStyle = dataGridView1.ColumnHeadersDefaultCellStyle.Clone();
             dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.Red;
 
@@ -35,140 +44,38 @@ namespace WindowsFormsApplication1
             {
                 item.HeaderCell.Style = hStyle;
             }
-            while (true)
-            {
-                BindData();
-            }
+            FormClosed += Main_Closed;
         }
 
-        private void Main_Load(object sender, EventArgs e)
-        {
-            mGen.MarketUpdate += r_MarketUpdate;
-            mGen.Start();
-        }
-
-        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        /* This was needed to stop the market update process before closing a window, 
+         * otherwise the process will continue after the window was closed, and attempt
+         * to update and fail. Hence causing an error, and stopping the program 
+         */
+        private void Main_Closed(object sender, FormClosedEventArgs e)
         {
             mGen.Stop();
         }
 
-
+        // receive update from market library
         private void r_MarketUpdate(object sender, MarketEvent e)
         {
-            byte[] dBytes = e.Data;
-            ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
-            if (ds != null)
-            {
-                var dList = new List<ByteDs>()
-                {
-                    new ByteDs()
-                    {
-                        ID = ds.ID,
-                        TradePrice = ds.TradePrice,
-                        TradeQty = ds.TradeQty,
-                        BidPrice = ds.BidPrice,
-                        BidQty = ds.BidQty,
-                        AskPrice = ds.AskPrice,
-                        AskQty = ds.AskQty
-                    }
-                };
-
-                var tempDGView = new DataGridView();
-                tempDGView = dataGridView1;
-                foreach (var item in dList)
-                {
-                    Boolean exists = false;
-
-                    foreach (DataGridViewRow row in tempDGView.Rows)
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Black;
-                        row.DefaultCellStyle.ForeColor = Color.White;
-
-                        if (row.Cells["ID"].Value != null && item.ID != null)
-                            if (row.Cells["ID"].Value.ToString() == item.ID.ToString())
-                            {
-                                exists = true;
-                                foreach (DataGridViewColumn col in tempDGView.Columns)
-                                {
-                                    var cell = row.Cells[col.Index].Style;
-                                    switch (col.Index)
-                                    {
-                                        case 1:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.DarkRed;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                        case 2:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.Black;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                        case 3:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.DarkRed;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                        case 4:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.DarkRed;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                        case 5:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.DarkRed;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                        case 6:
-                                            if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                                cell.BackColor = Color.DarkRed;
-                                            else
-                                                cell.BackColor = Color.Black;
-                                            break;
-                                    }
-                                }
-
-                                row.SetValues(item.ID,
-                                    item.TradePrice,
-                                    item.TradeQty,
-                                    item.BidPrice,
-                                    item.BidQty,
-                                    item.AskPrice,
-                                    item.AskQty);
-                            }
-                    }
-                    if (!exists)
-                    {
-                        tempDGView.DefaultCellStyle.BackColor = Color.Black;
-                        tempDGView.DefaultCellStyle.ForeColor = Color.White;
-                        tempDGView.Rows.Add(item.ID.ToString(),
-                                                item.TradePrice,
-                                                item.TradeQty,
-                                                item.BidPrice,
-                                                item.BidQty,
-                                                item.AskPrice,
-                                                item.AskQty);
-                    }
-
-                }
-                dataGridView1 = tempDGView;
-            }
+           dBytes = e.Data;
+           /* since the market update works on a different thread, it is required to 
+            * explicitally invoke this function on the thread it was created. Otherwise
+            * it would fail, giving an error from the datagridview function specifically
+            * made to give safe thread access.
+            */
+           BeginInvoke(new MethodInvoker(BindData));
         }
 
-        protected void DatGridView_RowUpdate(object sender, DataGridViewRowEventArgs e)
-        {
-            // DataGridViewRow row = dataGridView1.Rows[e.Row.Index];
-            // BindData();
-        }
-
-        
+        /* This method binds the date from the byte[] into a datastructure, and updates the 
+         * datagridview accordingly. So, as long as something is stored in the Byte it will run.
+         * It will also highlight the proper cells, based on change from the previous data stored
+         * to the current data. If no changes occur, it will unhighlight that data. 
+         */
         private void BindData()
         {
-            ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
+            ByteDs ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
 
             if (ds != null)
             {
@@ -186,13 +93,10 @@ namespace WindowsFormsApplication1
                     }
                 };
 
-                var tempDGView = new DataGridView();
-                tempDGView = dataGridView1;
                 foreach (var item in dList)
                 {
                     Boolean exists = false;
-
-                    foreach (DataGridViewRow row in tempDGView.Rows)
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
                         row.DefaultCellStyle.BackColor = Color.Black;
                         row.DefaultCellStyle.ForeColor = Color.White;
@@ -201,7 +105,7 @@ namespace WindowsFormsApplication1
                         if (row.Cells["ID"].Value.ToString() == item.ID.ToString())
                         {
                             exists = true;
-                            foreach (DataGridViewColumn col in tempDGView.Columns)
+                            foreach (DataGridViewColumn col in dataGridView1.Columns)
                             {
                                 var cell = row.Cells[col.Index].Style;
                                 switch (col.Index)
@@ -213,38 +117,38 @@ namespace WindowsFormsApplication1
                                             cell.BackColor = Color.Black;
                                         break;
                                     case 2:
-                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
-                                            cell.BackColor = Color.Black;
+                                        if (row.Cells[col.Index].Value.ToString() != item.TradeQty.ToString())
+                                            cell.BackColor = Color.DarkRed;
                                         else
                                             cell.BackColor = Color.Black;
                                         break;
                                     case 3:
-                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                        if (row.Cells[col.Index].Value.ToString() != item.BidPrice.ToString())
                                             cell.BackColor = Color.DarkRed;
                                         else
                                             cell.BackColor = Color.Black;
                                         break;
                                     case 4:
-                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                        if (row.Cells[col.Index].Value.ToString() != item.BidQty.ToString())
                                             cell.BackColor = Color.DarkRed;
                                         else
                                             cell.BackColor = Color.Black;
                                         break;
                                     case 5:
-                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                        if (row.Cells[col.Index].Value.ToString() != item.AskPrice.ToString())
                                             cell.BackColor = Color.DarkRed;
                                         else
                                             cell.BackColor = Color.Black;
                                         break;
                                     case 6:
-                                        if (row.Cells[col.Index].Value.ToString() != item.TradePrice.ToString())
+                                        if (row.Cells[col.Index].Value.ToString() != item.AskQty.ToString())
                                             cell.BackColor = Color.DarkRed;
                                         else
                                             cell.BackColor = Color.Black;
                                         break;
                                 }
                             }
-
+                            // Update the row data
                             row.SetValues(item.ID, 
                                 item.TradePrice,
                                 item.TradeQty,
@@ -254,11 +158,13 @@ namespace WindowsFormsApplication1
                                 item.AskQty);
                         }
                     }
+                    // if there are no instances of this data, by ID, it will create a new row, and add the 
+                    // new values. 
                     if (!exists)
                     {
-                        tempDGView.DefaultCellStyle.BackColor = Color.Black;
-                        tempDGView.DefaultCellStyle.ForeColor = Color.White;
-                        tempDGView.Rows.Add(item.ID.ToString(),
+                        dataGridView1.DefaultCellStyle.BackColor = Color.Black;
+                        dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+                        dataGridView1.Rows.Add(item.ID,
                                                 item.TradePrice,
                                                 item.TradeQty,
                                                 item.BidPrice,
@@ -268,10 +174,8 @@ namespace WindowsFormsApplication1
                     }
 
                 }
-                dataGridView1 = tempDGView;
             }
         }
-       
 
         // convert the byte array to the ByteDs datastructure for access
         public static object BytesToObject(ref byte[] dataBytes, Type overlayType)
@@ -316,7 +220,10 @@ namespace WindowsFormsApplication1
 
         private void label1_Click_1(object sender, EventArgs e)
         {
-            
+            count += 1;
+            main newMain = new main();
+            newMain.Show();
+            newMain.Text = "New Window";
         }
 
     }
