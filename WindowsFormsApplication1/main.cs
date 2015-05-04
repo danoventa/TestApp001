@@ -19,7 +19,10 @@ namespace WindowsFormsApplication1
     public partial class main : Form
     {
         MarketGenerator mGen = new MarketGenerator();
-        ByteDs ds;
+        private byte[] dBytes;
+        private ByteDs ds;
+        
+           
 
         public main()
         {
@@ -31,6 +34,10 @@ namespace WindowsFormsApplication1
             foreach (DataGridViewColumn item in dataGridView1.Columns)
             {
                 item.HeaderCell.Style = hStyle;
+            }
+            while (true)
+            {
+                BindData();
             }
         }
 
@@ -158,7 +165,7 @@ namespace WindowsFormsApplication1
             // BindData();
         }
 
-        /*
+        
         private void BindData()
         {
             ds = (ByteDs)BytesToObject(ref dBytes, typeof(ByteDs));
@@ -264,7 +271,7 @@ namespace WindowsFormsApplication1
                 dataGridView1 = tempDGView;
             }
         }
-        */
+       
 
         // convert the byte array to the ByteDs datastructure for access
         public static object BytesToObject(ref byte[] dataBytes, Type overlayType)
